@@ -12,9 +12,9 @@ from email.mime.multipart import MIMEMultipart
 SITE_URL       = os.environ["SITE_URL"]          # ex: https://meusite.com.br
 KEYWORD        = os.environ.get("KEYWORD", "")   # palavra-chave esperada na página
 
-GMAIL_FROM     = os.environ["GMAIL_FROM"]        # ex: seuemail@gmail.com
-GMAIL_PASSWORD = os.environ["GMAIL_PASSWORD"]    # senha de app do Gmail
-EMAIL_TO       = os.environ["EMAIL_TO"]          # ex: destino@gmail.com
+GMAIL_FROM     = os.environ["GMAIL_FROM"].strip()        # ex: seuemail@gmail.com
+GMAIL_PASSWORD = os.environ["GMAIL_PASSWORD"].strip()    # senha de app do Gmail
+EMAIL_TO       = os.environ["EMAIL_TO"].strip()          # ex: destino@gmail.com
 
 TIMEOUT_SEC    = 10
 # ──────────────────────────────────────────────────────────────────
@@ -39,7 +39,7 @@ def check_ssl(url):
             s.connect((hostname, 443))
             cert = s.getpeercert()
         expire_date = datetime.datetime.strptime(cert["notAfter"], "%b %d %H:%M:%S %Y %Z")
-        days_left = (expire_date - datetime.datetime.utcnow()).days
+        days_left = (expire_date - datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)).days
         return True, days_left, expire_date.strftime("%d/%m/%Y")
     except ssl.SSLCertVerificationError:
         return False, 0, "Inválido"
