@@ -60,7 +60,8 @@ def status_icon(ok):
 
 def build_report(url, status_code, elapsed_ms, html, ssl_valid, ssl_days, ssl_expiry, kw_found):
     now = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
-    site_ok = status_code == 200
+    # 403 = Cloudflare bloqueando bots (site está no ar)
+    site_ok = status_code in (200, 403)
 
     issues = []
     if not site_ok:
