@@ -23,7 +23,8 @@ TIMEOUT_SEC    = 10
 def check_http(url):
     try:
         start = time.time()
-        resp = requests.get(url, timeout=TIMEOUT_SEC, allow_redirects=True)
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        resp = requests.get(url, timeout=TIMEOUT_SEC, allow_redirects=True, headers=headers)
         elapsed = round((time.time() - start) * 1000)
         return resp.status_code, elapsed, resp.text
     except Exception:
