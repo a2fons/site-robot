@@ -1,0 +1,5 @@
+.github/
+  workflows/
+    monitor.yml   ← este aqui
+monitor.py
+requirements.txt
