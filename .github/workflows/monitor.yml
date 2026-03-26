@@ -1,5 +1,31 @@
-.github/
-  workflows/
-    monitor.yml   ← este aqui
-monitor.py
-requirements.txt
+name: Monitor de Site
+
+on:
+  schedule:
+    - cron: "0 11 * * *"  # 08:00 BRT (UTC-3)
+  workflow_dispatch:        # permite rodar manualmente pela aba Actions
+
+jobs:
+  monitorar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Executar monitoramento
+        env:
+          SITE_URL:        ${{ secrets.SITE_URL }}
+          KEYWORD:         ${{ secrets.KEYWORD }}
+          GMAIL_FROM:      ${{ secrets.GMAIL_FROM }}
+          GMAIL_PASSWORD:  ${{ secrets.GMAIL_PASSWORD }}
+          EMAIL_TO:        ${{ secrets.EMAIL_TO }}
+        run: python monitor.py
